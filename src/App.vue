@@ -25,7 +25,7 @@ import DotEffect from './components/DotEffect.vue';
 
 const parentMessage = ref('Hello from Parent');
 
-function updateParentMessage(newMessage) {
+function updateParentMessage(newMessage: string) {
   parentMessage.value = newMessage;
 }
 </script>
