@@ -10,37 +10,13 @@
 </template>
 
 <script setup>
-// import { onMounted, onUnmounted } from 'vue';
-
-// let scrollToMain_ing = false; // 用于标识是否正在滚动到主要内容
 
 const scrollToMain = () => {
   const mainPage = document.querySelector('.main-section');
   if (mainPage) {
     mainPage.scrollIntoView({ behavior: 'smooth' });
-    // scrollToMain_ing = true;
   }
 };
-// const scrollToMain = (mainSectionRef) => {
-//     if (mainSectionRef.value) {
-//         mainSectionRef.value.scrollIntoView({ behavior: 'smooth' });
-//     }
-// };
-
-
-// const handleScroll = () => {
-//   if (!scrollToMain_ing && window.scrollY > 10) {
-//     scrollToMain();
-//   }
-// };
-
-// onMounted(() => {
-//   window.addEventListener('scroll', handleScroll);
-// });
-
-// onUnmounted(() => {
-//   window.removeEventListener('scroll', handleScroll);
-// });
 
 </script>
 
@@ -78,16 +54,12 @@ const scrollToMain = () => {
   font-size: 2rem;
   animation: bounce 2s infinite;
   color: white;
-  /* 确保箭头颜色为白色 */
   opacity: 0.6;
-  /* 初始透明度 */
   transition: opacity 0.3s ease-in-out;
-  /* 添加过渡效果 */
 }
 
 .scroll-down:hover {
   opacity: 1;
-  /* 鼠标悬停时透明度变为1（完全不透明） */
 }
 
 @keyframes bounce {

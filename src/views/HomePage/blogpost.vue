@@ -1,5 +1,6 @@
 <template>
-    <div class="blog-post">
+    <div class="blog-section">
+    <div class="blog-post"  @click="goToArticle">
         <img src="/BG_Shiroko.png" alt="博客图片">
         <div class="post-info">
             <h3>文章标题</h3>
@@ -27,10 +28,18 @@
             <p>文章内容简介...</p>
         </div>
     </div>
+</div>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+
+const goToArticle = () => {
+//   router.push('/test'); // 跳转到指定路径
+  window.location.href = '/test';
+};
 
 </script>
 
@@ -44,8 +53,8 @@
 }
 
 .blog-post img {
-    width: 30%;
-    height: auto;
+    width: 25%;
+    height: 175px;
     object-fit: cover;
 }
 
@@ -55,10 +64,12 @@
 
 .post-info h3 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 24px;
+    color: #409EFF;
 }
 
 .post-info p {
-    margin: 0.5rem 0 0;
+    margin: 12px 0;
+    color: #73767a;
 }
 </style>
