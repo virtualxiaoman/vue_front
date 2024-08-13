@@ -146,9 +146,9 @@ const drawDots = () => {
   // 开始计时
   let start = performance.now();
   dots.value.forEach(dot => {
-    const lerpFactor = 0.01; // 影响过渡速度的因子
+    // const lerpFactor = 0.01; // 影响过渡速度的因子
     // const lerpFactor = 0.02 * (1 - Math.min(dot.distance / maxDistance, 0.9));  // 根据鼠标距离调整过渡速度
-    // const lerpFactor = 0.015 * Math.min(Math.pow(maxDistance/(dot.distance+1), 5), 1);  // 根据鼠标距离调整过渡速度
+    const lerpFactor = 0.015 * Math.min(Math.pow(maxDistance/(dot.distance+1), 0.5), 1);  // 根据鼠标距离调整过渡速度
     const previousOffsetX = dot.offsetX;
     const previousOffsetY = dot.offsetY;
 

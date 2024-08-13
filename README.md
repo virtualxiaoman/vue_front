@@ -21,4 +21,6 @@
 - [明日方舟](https://ak.hypergryph.com/#world)
 - [B站](https://www.bilibili.com/)
 - [github](https://github.com/)
+- [Nico](https://www.lozumi.com/)
+- [dekrt](https://dekrt.cn/)
 - [绿叶学习网](http://www.lvyestudy.com/)
