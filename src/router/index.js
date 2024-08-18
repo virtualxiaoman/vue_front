@@ -9,10 +9,14 @@ const routes = [
         component: Home,
     },
     {
-        path: '/test', // 设置路由路径
-        name: 'test',
-        component: Test, // 组件对应路由
+        path: '/article/:name',
+        component: () => import('../views/Article/test.vue'),
     },
+    {
+        path: '/test',
+        name: 'test',
+        component: Test,
+    }
     // 可以在这里添加更多路由
 ];
 

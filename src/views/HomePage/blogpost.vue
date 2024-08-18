@@ -38,7 +38,7 @@ const router = useRouter();
 
 const goToArticle = () => {
 //   router.push('/test'); // 跳转到指定路径
-  window.location.href = '/test';
+  window.location.href = '/article/深度学习';
 };
 
 </script>
