@@ -1,7 +1,7 @@
 <template>
     <div>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/default.min.css">
-        <textarea v-model="comment" placeholder="Write your comment in Markdown..."></textarea>
+        <textarea v-model="comment" placeholder="Write your comment in Markdown...该功能正在写。。发不了评论。"></textarea>
         <div v-html="parsedComment" class="markdown-body"></div>
     </div>
 </template>

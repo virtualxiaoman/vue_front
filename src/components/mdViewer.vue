@@ -60,7 +60,18 @@ onMounted(async () => {
     const headings: Record<string, string> = {};
 
     let i = 0; // 用于生成递增序列的变量
+    // 定义一个函数来生成唯一的id
+    function generateUniqueId(text, i) {
+        const sanitizedText = text.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]+/g, ''); // 替换所有非字母数字字符为下划线
+        return `${sanitizedText}_${i}`;
+    }
 
+    // 替换renderedContent中的h标签，并生成id
+    let processedContent = renderedContent.replace(/<(h[1-6])>(.*?)<\/\1>/gi, (match, p1, p2) => {
+        const id = generateUniqueId(p2.trim(), i++); // 生成id
+        headings[id] = p2.trim(); // 记录原始内容和生成的id
+        return `<${p1} id="${id}">${p2}</${p1}>`;
+    });
     // // 替换marked渲染后的HTML，为h标签生成唯一的ID
     // let processedContent = renderedContent.replace(/(<h[1-6][^>]*>)(.*?)(<\/h[1-6]>)/gi, (match, p1, p2, p3) => {
     //     // 使用h标签的内容生成一个ID，直接使用递增的i值
@@ -87,7 +98,7 @@ onMounted(async () => {
     // });
     // // 现在 headings 对象和 processedContent 都已正确生成
 
-    let processedContent = renderedContent;
+    // let processedContent = renderedContent;
     content.value = processedContent;
     console.log("mdViewer.vue: processedContent", processedContent);
     // 触发 contentLoaded 事件并传递渲染后的内容

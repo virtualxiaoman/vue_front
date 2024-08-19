@@ -1,47 +1,49 @@
 <template>
     <div class="blog-section">
-    <div class="blog-post"  @click="goToArticle">
+    <div class="blog-post" @click="goToArticle('/article/深度学习')">
         <img src="/BG_Shiroko.png" alt="博客图片">
         <div class="post-info">
-            <h3>文章标题</h3>
+            <h3>深度学习</h3>
             <p>文章内容简介...</p>
         </div>
     </div>
-    <div class="blog-post">
+    <div class="blog-post" @click="goToArticle('/article/机器学习')">
         <img src="/BG_Shiroko.png" alt="博客图片">
         <div class="post-info">
-            <h3>文章标题</h3>
+            <h3>机器学习</h3>
             <p>文章内容简介...</p>
         </div>
     </div>
-    <div class="blog-post">
+    <div class="blog-post" @click="goToArticle('/article/自然语言处理')">
         <img src="/BG_Shiroko.png" alt="博客图片">
         <div class="post-info">
-            <h3>文章标题</h3>
+            <h3>自然语言处理</h3>
             <p>文章内容简介...</p>
         </div>
     </div>
-    <div class="blog-post">
+    <div class="blog-post" @click="goToArticle('/article/推荐系统')">
         <img src="/BG_Shiroko.png" alt="博客图片">
         <div class="post-info">
-            <h3>文章标题</h3>
+            <h3>推荐系统</h3>
             <p>文章内容简介...</p>
         </div>
     </div>
 </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-const goToArticle = () => {
-//   router.push('/test'); // 跳转到指定路径
-//   window.location.href = '/article/深度学习';
-    router.push('/article/深度学习');
+// const goToArticle = () => {
+// //   router.push('/test'); // 跳转到指定路径
+// //   window.location.href = '/article/深度学习';
+//     router.push('/article/深度学习');
+// };
+const goToArticle = (path: string) => {
+    router.push(path);
 };
-
 </script>
 
 <style scoped>
