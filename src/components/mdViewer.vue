@@ -22,29 +22,40 @@ const emit = defineEmits(['contentLoaded']);
 
 
 const content = ref('');
+// 大纲的键是id，值是标题文本加上递增的i
+const headings: Record<string, string> = {};
 
-
-onMounted(async () => {
-    console.log("mdViewer.vue", props.fileName);
-    const md_url = `/md_article/${props.fileName}.md`;
-    const response = await axios.get(md_url);
-    console.log("mdViewer.vue", response.data);
-
-    // First, replace LaTeX syntax with placeholder
-    let mdWithPlaceholders = response.data.replace(/\$\$(.*?)\$\$/gs, (match, p1) => {
+// 第一步，把markdown中的数学公式转换为base64编码
+function md2katex(md: string) {
+    let mdWithPlaceholders = md.replace(/\$\$(.*?)\$\$/gs, (match, p1) => {
         return `{{katex_block:${Buffer.from(p1).toString('base64')}}}`;
     }).replace(/\$(.*?)\$/g, (match, p1) => {
         return `{{katex_inline:${Buffer.from(p1).toString('base64')}}}`;
     });
+    return mdWithPlaceholders;
+}
 
-    // Then, pass the modified markdown through marked
-    let renderedContent = marked(mdWithPlaceholders, {
-        highlight: (code: string) => hljs.highlightAuto(code).value,
-        renderer: new marked.Renderer(),
+// 第二步，把md转化为heml
+function md2html(md: string) {
+    // 注释掉的方法无法处理高亮代码块
+    // let renderedContent = marked(md, {
+    //     highlight: (code: string) => hljs.highlightAuto(code).value,
+    //     renderer: new marked.Renderer(),
+    // });
+    // return renderedContent;
+    const html = marked(md);
+    // 手动处理代码高亮
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    tempDiv.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightBlock(block as HTMLElement);
     });
+    return tempDiv.innerHTML;
+}
 
-    // Replace placeholders with KaTeX-rendered HTML
-    renderedContent = renderedContent.replace(/{{katex_block:(.*?)}}/g, (match, p1) => {
+// 第三步，替换html中的数学公式
+function katex2html(html: string) {
+    let processedContent = html.replace(/{{katex_block:(.*?)}}/g, (match, p1) => {
         return katex.renderToString(Buffer.from(p1, 'base64').toString(), {
             throwOnError: false,
             displayMode: true
@@ -54,106 +65,45 @@ onMounted(async () => {
             throwOnError: false
         });
     });
+    return processedContent;
+}
 
-    // 存储h标签的原始内容和生成的ID
-    // 使用 TypeScript 的 Record 类型来声明 headings 对象
-    const headings: Record<string, string> = {};
-
-    let i = 0; // 用于生成递增序列的变量
-    // 定义一个函数来生成唯一的id
-    function generateUniqueId(text, i) {
-        const sanitizedText = text.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]+/g, ''); // 替换所有非字母数字字符为下划线
-        return `${sanitizedText}_${i}`;
-    }
-
+// 第四步，为h标签生成id
+function generate_h_id(html: string, i: number) {
     // 替换renderedContent中的h标签，并生成id
-    let processedContent = renderedContent.replace(/<(h[1-6])>(.*?)<\/\1>/gi, (match, p1, p2) => {
-        const id = generateUniqueId(p2.trim(), i++); // 生成id
-        headings[id] = p2.trim(); // 记录原始内容和生成的id
+    let processedContent = html.replace(/<(h[1-6])>(.*?)<\/\1>/gi, (match, p1, p2) => {
+        const id = generateUniqueId(p2.trim(), i++);  // 生成id
+        headings[id] = p2.trim();  // 记录原始内容和生成的id
         return `<${p1} id="${id}">${p2}</${p1}>`;
     });
-    // // 替换marked渲染后的HTML，为h标签生成唯一的ID
-    // let processedContent = renderedContent.replace(/(<h[1-6][^>]*>)(.*?)(<\/h[1-6]>)/gi, (match, p1, p2, p3) => {
-    //     // 使用h标签的内容生成一个ID，直接使用递增的i值
-    //     let content = p2.trim();
-    //     let id = `content${i++}`;
-    //     // 更新存储生成的ID
-    //     headings[content] = id;
+    return processedContent;
+}
 
-    //     // 返回带有新ID的h标签
-    //     return `${p1} id="${id}"` + p3;
-    // });
-    // let processedContent = renderedContent.replace(/(<h[1-6])([^>]*)>(.*?)<\/h[1-6]>/gi, (match, p1, p2, p3) => {
-    //     // 使用h标签的内容生成一个ID，直接使用递增的i值
-    //     let content = p3.trim();
-    //     let id = `content${i++}`;
-    //     // 更新存储生成的ID
-    //     headings[content] = id;
+// 定义一个函数来生成唯一的id
+function generateUniqueId(text, i) {
+    const sanitizedText = text.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]+/g, ''); // 替换所有非字母数字字符为下划线
+    return `${sanitizedText}_${i}`;
+}
 
-    //     // 在原有的h标签属性中添加id属性，如果已有id属性则替换它
-    //     let newTag = p1 + (p2 ? p2 + ' ' : '') + ` id="${id}"` + `>${p3}</${p1}>`;
+onMounted(async () => {
+    console.log("mdViewer.vue", props.fileName);
+    const md_url = `/md_article/${props.fileName}.md`;
+    const response = await axios.get(md_url);
+    console.log("mdViewer.vue", response.data);
 
-    //     // 返回带有新ID的h标签
-    //     return newTag;
-    // });
-    // // 现在 headings 对象和 processedContent 都已正确生成
+    const mdWithPlaceholders = md2katex(response.data);
+    let renderedContent = md2html(mdWithPlaceholders);
+    renderedContent = katex2html(renderedContent);
 
-    // let processedContent = renderedContent;
+    let i = 0;  // 用于生成递增序列的变量
+    let processedContent = generate_h_id(renderedContent, i);  // 替换renderedContent中的h标签，并生成id
+
     content.value = processedContent;
     console.log("mdViewer.vue: processedContent", processedContent);
-    // 触发 contentLoaded 事件并传递渲染后的内容
-    emit('contentLoaded', processedContent);
+    emit('contentLoaded', processedContent);  // 触发 contentLoaded 事件并传递渲染后的内容
 });
 
 
-// onMounted(async () => {
-//     console.log("mdViewer.vue", props.fileName);
-//     const md_url = `/md_article/${props.fileName}.md`;
-//     const response = await axios.get(md_url);
-//     console.log("mdViewer.vue", response.data);
-
-//     // First, replace LaTeX syntax with KaTeX-rendered HTML
-//     let mdWithKatex = response.data.replace(/\$\$(.*?)\$\$/g, (match, p1) => {
-//         return katex.renderToString(p1, {
-//             throwOnError: false,
-//             displayMode: true
-//         });
-//     }).replace(/\$(.*?)\$/g, (match, p1) => {
-//         return katex.renderToString(p1, {
-//             throwOnError: false
-//         });
-//     });
-
-//     // Then, pass the modified markdown through marked
-//     content.value = marked(mdWithKatex, {
-//         highlight: (code: string) => hljs.highlightAuto(code).value,
-//         renderer: new marked.Renderer(),
-//     });
-// });
-
-
-// onMounted(async () => {
-//     console.log("mdViewer.vue", props.fileName);
-//     const md_url = `/md_article/${props.fileName}.md`;
-//     const response = await axios.get(md_url);
-//     console.log("mdViewer.vue", response.data);
-
-//     content.value = marked(response.data, {
-//         highlight: (code: string) => hljs.highlightAuto(code).value,
-//         renderer: new marked.Renderer(),
-//     });
-
-//     // Render LaTeX using KaTeX
-//     content.value = content.value.replace(/\$\$(.*?)\$\$/g, (match, p1) => {
-//         return katex.renderToString(p1, {
-//             throwOnError: false
-//         });
-//     }).replace(/\$(.*?)\$/g, (match, p1) => {
-//         return katex.renderToString(p1, {
-//             throwOnError: false
-//         });
-//     });
-// });
 </script>
 
 <style scoped>

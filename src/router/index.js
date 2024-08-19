@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Test from '../views/Article/index.vue';
 import Home from '../views/HomePage/index.vue';
 
 const routes = [
@@ -12,12 +11,6 @@ const routes = [
         path: '/article/:name',
         component: () => import('../views/Article/index.vue'),
     },
-    // {
-    //     path: '/test',
-    //     name: 'test',
-    //     component: Test,
-    // }
-    // 可以在这里添加更多路由
 ];
 
 const router = createRouter({

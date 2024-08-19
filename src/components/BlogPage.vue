@@ -61,7 +61,7 @@ function updateContent(newContent: string) {
 }
 
 .left-content {
-    padding-left: 1%;
+    padding-left: 0.6%;
     padding-right: 1%;
     width: 14%;
 

@@ -139,53 +139,74 @@ const scrollToHeading = (content: string) => {
     console.warn('Element not found!')
   }
 }
+
+
 </script>
+
+
 
 <style scoped>
 ul {
     list-style: none;
     padding: 0;
+    margin: 0;
+}
+
+li {
+    margin: 0;
 }
 
 p {
     text-decoration: none;
     color: #D81B60;
+    margin: 0;
 }
-
-
-/* .header-link {
-    display: block;
-    padding: 0.5em 0;
-    text-decoration: none;
-} */
 
 .header-1 {
     font-size: 1em;
     font-weight: bold;
+    margin: 10px 0px 10px 0px;
+    transition: background-color 0.3s ease;
 }
 
 .header-2 {
+    color: #E91E63;
     font-size: 0.83em;
-    margin-left: 1em;
+    margin: 6px 0px 6px 1em;
+    transition: background-color 0.3s ease;
 }
 
 .header-3 {
+    color: #F06292;
     font-size: 0.67em;
-    margin-left: 2em;
+    margin: 3px 0px 3px 2em;
+    transition: background-color 0.3s ease;
 }
 
 .header-4 {
+    color: #F48FB1;
     font-size: 0.5em;
-    margin-left: 3em;
+    margin: 2px 0px 2px 3em;
+    transition: background-color 0.3s ease;
 }
 
 .header-5 {
+    color: #000000;
     font-size: 0.42em;
-    margin-left: 4em;
+    margin: 1px 0px 1px 4em;
+    transition: background-color 0.3s ease;
 }
 
 .header-6 {
+    color: #000000;
     font-size: 0.33em;
-    margin-left: 5em;
+    margin: 0px 0px 0px 5em;
+    transition: background-color 0.3s ease;
 }
+
+
+.header-1:hover, .header-2:hover, .header-3:hover, .header-4:hover, .header-5:hover, .header-6:hover {
+    background-color: #f0f0f0;
+}
+
 </style>
