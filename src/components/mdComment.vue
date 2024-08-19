@@ -23,11 +23,14 @@ const parsedComment = computed(() =>
 
 <style scoped>
 textarea {
-    width: 80%;
+    width: 70%;
     height: 150px;
     margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #e1e4e8;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .markdown-body {

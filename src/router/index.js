@@ -12,11 +12,11 @@ const routes = [
         path: '/article/:name',
         component: () => import('../views/Article/test.vue'),
     },
-    {
-        path: '/test',
-        name: 'test',
-        component: Test,
-    }
+    // {
+    //     path: '/test',
+    //     name: 'test',
+    //     component: Test,
+    // }
     // 可以在这里添加更多路由
 ];
 
