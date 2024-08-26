@@ -6,6 +6,8 @@
   - 分类
   - 标签
     - 可视化
+- 文章界面
+  - 搜索：但非对标浏览器的Ctrl+F，而是高亮显示文章的某个/某些关键词，方便用户自定义其阅读重点内容
 - 工具
   - [乱码恢复](http://www.mytju.com/classCode/tools/messyCodeRecover.asp)
   - [链接补全]

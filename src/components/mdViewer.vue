@@ -36,14 +36,14 @@ function md2katex(md: string) {
 }
 
 // 第二步，把md转化为heml
-function md2html(md: string) {
+async function md2html(md: string) {
     // 注释掉的方法无法处理高亮代码块
     // let renderedContent = marked(md, {
     //     highlight: (code: string) => hljs.highlightAuto(code).value,
     //     renderer: new marked.Renderer(),
     // });
     // return renderedContent;
-    const html = marked(md);
+    const html = await marked(md);
     // 手动处理代码高亮
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = html;
@@ -80,7 +80,7 @@ function generate_h_id(html: string, i: number) {
 }
 
 // 定义一个函数来生成唯一的id
-function generateUniqueId(text, i) {
+function generateUniqueId(text: string, i: number) {
     const sanitizedText = text.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]+/g, ''); // 替换所有非字母数字字符为下划线
     return `${sanitizedText}_${i}`;
 }
@@ -92,7 +92,7 @@ onMounted(async () => {
     console.log("mdViewer.vue", response.data);
 
     const mdWithPlaceholders = md2katex(response.data);
-    let renderedContent = md2html(mdWithPlaceholders);
+    let renderedContent = await md2html(mdWithPlaceholders);
     renderedContent = katex2html(renderedContent);
 
     let i = 0;  // 用于生成递增序列的变量
